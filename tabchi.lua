@@ -484,12 +484,17 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       local contacts = redis:get("tabchi:" .. tostring(tabchi_id) .. ":totalcontacts")
       local query = tostring(gps) .. " " .. tostring(sgps) .. " " .. tostring(pvs) .. " " .. tostring(links) .. " " .. tostring(sudo) .. " " .. tostring(contacts)
           local text = [[
-		  
+	  
 Normal Stats By : @JoveTeam
+			
 Users : ]] .. tostring(pvs) .. [[
+			
 Groups : ]] .. tostring(gps) .. [[
+			
 SuperGroups : ]] .. tostring(sgps) .. [[
+			
 Saved Links : ]] .. tostring(links) .. [[
+			
 Saved Contacts : ]] .. tostring(contacts)
  return tdcli.sendMessage(msg.chat_id_, 0, 1, text, 1, "")
     elseif text_:match("^[!/#](addedmsg) (.*)") then
