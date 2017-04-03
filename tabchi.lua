@@ -487,15 +487,15 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
 	  
 Normal Stats By : @JoveTeam
 			
-Users : ]] .. tostring(pvs) .. [[
+کاربران : ]] .. tostring(pvs) .. [[
 			
-Groups : ]] .. tostring(gps) .. [[
+گروه های معمولی : ]] .. tostring(gps) .. [[
 			
-SuperGroups : ]] .. tostring(sgps) .. [[
+سوپر گروه ها : ]] .. tostring(sgps) .. [[
 			
-Saved Links : ]] .. tostring(links) .. [[
+لینک های ذخیره شده : ]] .. tostring(links) .. [[
 			
-Saved Contacts : ]] .. tostring(contacts)
+مخاطبین ذخیره شده : ]] .. tostring(contacts)
  return tdcli.sendMessage(msg.chat_id_, 0, 1, text, 1, "")
     elseif text_:match("^[!/#](addedmsg) (.*)") then
       local matches = {
