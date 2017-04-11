@@ -173,16 +173,16 @@ function process(msg)
   process_updates()
   if is_sudo(msg) then
     if is_full_sudo(msg) then
-      if text_:match("^[!/#](addsudo) (%d+)") then
+      if text_:match("^(اضافه کردن مدیر) (%d+)") then
         local matches = {
-          text_:match("^[!/#](addsudo) (%d+)")
+          text_:match("^(اضافه کردن مدیر) (%d+)")
         }
         if #matches == 2 then
           redis:sadd("tabchi:" .. tostring(tabchi_id) .. ":sudoers", tonumber(matches[2]))
           save_log("User " .. msg.sender_user_id_ .. ", Added " .. matches[2] .. " As Sudo")
-          return tostring(matches[2]) .. " Added to Sudo Users"
+          return tostring(matches[2]) .. " 🔹به لیست مدیران اضافه شد"
         end
-			    elseif text_:match("^[!/#](help)") and is_sudo(msg) then
+			    elseif text_:match("^(راهنما)") and is_sudo(msg) then
       local text1 = [[
 	  
 راهنمای ربات تبچی نسخه 4.3 دیکامپایل شده بدون تبلیغ
@@ -252,14 +252,14 @@ function process(msg)
 Help >> @JoveTeam ]]
 return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
 	  
-      elseif text_:match("^[!/#](remsudo) (%d+)") then
+      elseif text_:match("^(حذف مدیر) (%d+)") then
         local matches = {
-          text_:match("^[!/#](remsudo) (%d+)")
+          text_:match("^(حذف مدیر) (%d+)")
         }
         if #matches == 2 then
           redis:srem("tabchi:" .. tostring(tabchi_id) .. ":sudoers", tonumber(matches[2]))
           save_log("User " .. msg.sender_user_id_ .. ", Removed " .. matches[2] .. " From Sudoers")
-          return tostring(matches[2]) .. " Removed From Sudo Users"
+          return tostring(matches[2]) .. " 🔹از لیست مدیرات حذف شد"
         end
       elseif text_:match("^[!/#]sudolist$") then
         local sudoers = redis:smembers("tabchi:" .. tostring(tabchi_id) .. ":sudoers")
@@ -267,30 +267,30 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         for i, v in pairs(sudoers) do
           text = tostring(text) .. tostring(i) .. ". " .. tostring(v)
         end
-        save_log("User " .. msg.sender_user_id_ .. ", Requested Sudo List")
+        save_log("🔹کاربر " .. msg.sender_user_id_ .. ", Requested Sudo List")
         return text
-      elseif text_:match("^[!/#](sendlogs)$") then
+      elseif text_:match("^(ارسال لاگ)$") then
         tdcli.send_file(msg.chat_id_, "Document", "tabchi_" .. tostring(tabchi_id) .. "_logs.txt", "Tabchi " .. tostring(tabchi_id) .. " Logs!")
         save_log("User " .. msg.sender_user_id_ .. ", Requested Logs")
-      elseif text_:match("^[!/#](setname) '(.*)' '(.*)'$") then
+      elseif text_:match("^(تنظیم نام) '(.*)' '(.*)'$") then
         local matches = {
-          text_:match("^[!/#](setname) '(.*)' '(.*)'$")
+          text_:match("^(تنظیم نام) '(.*)' '(.*)'$")
         }
         if #matches == 3 then
           tdcli.changeName(matches[2], matches[3])
           save_log("User " .. msg.sender_user_id_ .. ", Changed Name To " .. matches[2] .. " " .. matches[3])
           return "Profile Name Changed To : " .. matches[2] .. " " .. matches[3]
         end
-      elseif text_:match("^[!/#](setusername) (.*)$") then
+      elseif text_:match("^(تنظیم یوزرنیم) (.*)$") then
         local matches = {
-          text_:match("^[!/#](setusername) (.*)$")
+          text_:match("^(تنظیم یوزرنیم) (.*)$")
         }
         if #matches == 2 then
           tdcli.changeUsername(matches[2])
           save_log("User " .. msg.sender_user_id_ .. ", Changed Username To " .. matches[2])
           return "Username Changed To : @" .. matches[2]
         end
-      elseif text_:match("^[!/#](delusername)$") then
+      elseif text_:match("^(حذف یوزرنیم)$") then
         tdcli.changeUsername()
         save_log("User " .. msg.sender_user_id_ .. ", Deleted Username")
         return "Username Deleted"
@@ -304,9 +304,9 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         end
       end
     end
-    if text_:match("^[!/#](pm) (%d+) (.*)") then
+    if text_:match("^(پی ام) (%d+) (.*)") then
       local matches = {
-        text_:match("^[!/#](pm) (%d+) (.*)")
+        text_:match("^(پی ام) (%d+) (.*)")
       }
       if #matches == 3 then
         tdcli.sendMessage(tonumber(matches[2]), 0, 1, matches[3], 1, "html")
@@ -314,9 +314,9 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         return "Sent!"
       end
 	  
-    elseif text_:match("^[!/#](setanswer) '(.*)' (.*)") then
+    elseif text_:match("^(تنظیم جواب) '(.*)' (.*)") then
       local matches = {
-        text_:match("^[!/#](setanswer) '(.*)' (.*)")
+        text_:match("^(تنظیم جواب) '(.*)' (.*)")
       }
       if #matches == 3 then
         redis:hset("tabchi:" .. tostring(tabchi_id) .. ":answers", matches[2], matches[3])
@@ -324,9 +324,9 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         save_log("User " .. msg.sender_user_id_ .. ", Set Answer Of " .. matches[2] .. " To " .. maches[3])
         return "Answer for " .. tostring(matches[2]) .. " set to :\n" .. tostring(matches[3])
       end
-    elseif text_:match("^[!/#](delanswer) (.*)") then
+    elseif text_:match("^(حذف جواب) (.*)") then
       local matches = {
-        text_:match("^[!/#](delanswer) (.*)")
+        text_:match("^(حذف جواب) (.*)")
       }
       if #matches == 2 then
         redis:hdel("tabchi:" .. tostring(tabchi_id) .. ":answers", matches[2])
@@ -334,7 +334,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         save_log("User " .. msg.sender_user_id_ .. ", Deleted Answer Of " .. matches[2])
         return "Answer for " .. tostring(matches[2]) .. " deleted"
       end
-    elseif text_:match("^[!/#]answers$") then
+    elseif text_:match("^جواب ها$") then
       local text = "Bot auto answers :\n"
       local answrs = redis:smembers("tabchi:" .. tostring(tabchi_id) .. ":answerslist")
       for i, v in pairs(answrs) do
@@ -356,9 +356,9 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       elseif chat_type(msg.chat_id_) == "chat" then
         tdcli.changeChatMemberStatus(msg.chat_id_, info.id_, "Kicked")
       end
-    elseif text_:match("^[!/#](leave) (%d+)$") then
+    elseif text_:match("^(ترک کردن) (%d+)$") then
       local matches = {
-        text_:match("^[!/#](leave) (%d+)$")
+        text_:match("^(ترک کردن) (%d+)$")
       }
       if #matches == 2 then
         local info = redis:get("tabchi:" .. tostring(tabchi_id) .. ":botinfo")
@@ -377,14 +377,14 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         end
         return "Leaved " .. matches[2]
       end
-    elseif text_:match("^[!/#](join) (%d+)$") then
+    elseif text_:match("^(پیوستن) (%d+)$") then
       local matches = {
-        text_:match("^[!/#](join) (%d+)$")
+        text_:match("^(پیوستن) (%d+)$")
       }
       save_log("User " .. msg.sender_user_id_ .. ", Joined " .. matches[2] .. " Via Bot")
       tdcli.addChatMember(tonumber(matches[2]), msg.sender_user_id_, 50)
       return "I've Invited You To " .. matches[2]
-    elseif text_:match("^[!/#]addmembers$") and msg.chat_type_ ~= "private" then
+    elseif text_:match("^اضافه کردن افراد$") and msg.chat_type_ ~= "private" then
       local add_all
       function add_all(extra, result)
         local usrs = redis:smembers("tabchi:" .. tostring(tabchi_id) .. ":pvis")
@@ -403,7 +403,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       }, add_all, {})
       save_log("User " .. msg.sender_user_id_ .. ", Used AddMembers In " .. msg.chat_id_)
       return "Adding members to group..."
-    elseif text_:match("^[!/#]contactlist$") then
+    elseif text_:match("^لیست شماره ها$") then
       tdcli_function({
         ID = "SearchContacts",
         query_ = nil,
@@ -411,7 +411,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       }, contact_list, {
         chat_id_ = msg.chat_id_
       })
-    elseif text_:match("^[!/#]exportlinks$") then
+    elseif text_:match("^استخراج لینک ها$") then
       local text = "Group Links :\n"
       local links = redis:smembers("tabchi:" .. tostring(tabchi_id) .. ":savedlinks")
       for i, v in pairs(links) do
@@ -425,27 +425,27 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
       tdcli.send_file(msg.chat_id_, "Document", "tabchi_" .. tostring(tabchi_id) .. "_links.txt", "Tabchi " .. tostring(tabchi_id) .. " Links!")
       save_log("User " .. msg.sender_user_id_ .. ", Requested Contact List")
       return io.popen("rm -rf tabchi_" .. tostring(tabchi_id) .. "_links.txt"):read("*all")
-    elseif text_:match("[!/#](block) (%d+)") then
+    elseif text_:match("(بلاک) (%d+)") then
       local matches = {
-        text_:match("[!/#](block) (%d+)")
+        text_:match("(بلاک) (%d+)")
       }
       if #matches == 2 then
         tdcli.blockUser(tonumber(matches[2]))
         save_log("User " .. msg.sender_user_id_ .. ", Blocked " .. matches[2])
         return "User blocked"
       end
-    elseif text_:match("[!/#](unblock) (%d+)") then
+    elseif text_:match("(انبلاک) (%d+)") then
       local matches = {
-        text_:match("[!/#](unblock) (%d+)")
+        text_:match("(انبلاک) (%d+)")
       }
       if #matches == 2 then
         tdcli.unblockUser(tonumber(matches[2]))
         save_log("User " .. msg.sender_user_id_ .. ", Unlocked " .. matches[2])
         return "User unblocked"
       end
-    elseif text_:match("^[!/#](s2a) (.*) (.*)") then
+    elseif text_:match("^(ارسال به همه) (.*) (.*)") then
       local matches = {
-        text_:match("^[!/#](s2a) (.*) (.*)")
+        text_:match("^(ارسال به همه) (.*) (.*)")
       }
       if #matches == 3 and (matches[2] == "banners" or matches[2] == "boards") then
         local all = redis:smembers("tabchi:" .. tonumber(tabchi_id) .. ":all")
@@ -466,7 +466,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
         end
         save_log("User " .. msg.sender_user_id_ .. ", Used S2A " .. matches[2] .. " For " .. matches[3])
       end
-    elseif text_:match("^[!/#]panel$") then
+    elseif text_:match("^پنل$") then
       local contact_num
       function contact_num(extra, result)
         redis:set("tabchi:" .. tostring(tabchi_id) .. ":totalcontacts", result.total_count_)
@@ -557,9 +557,9 @@ Normal Stats By : @JoveTeam
           return "Joinlinks Turned Off"
         end
       end
-    elseif text_:match("^[!/#](savelinks) (.*)") then
+    elseif text_:match("^(ذخیره لینک ها) (.*)") then
       local matches = {
-        text_:match("^[!/#](savelinks) (.*)")
+        text_:match("^(ذخیره لینک ها) (.*)")
       }
       if #matches == 2 then
         if matches[2] == "on" then
@@ -572,9 +572,9 @@ Normal Stats By : @JoveTeam
           return "Savelinks Turned Off"
         end
       end
-    elseif text_:match("^[!/#](addcontacts) (.*)") then
+    elseif text_:match("^(اضافه کردن شماره) (.*)") then
       local matches = {
-        text_:match("^[!/#](addcontacts) (.*)")
+        text_:match("^(اضافه کردن شماره) (.*)")
       }
       if #matches == 2 then
         if matches[2] == "on" then
