@@ -269,11 +269,17 @@ function process(msg)
 افزودن افراد
 اضافه کردن همه اعضای داخل ربات به یک گروه 🔛
 🔹🔹🔹🔹🔹🔹🔹🔹🔹
+انلاین
+وضعیت انلاین بودن ربات(حتی اگر ریپ چت باشد باید به این پیام پاسخ دهد) 👌🏻
+🔹🔹🔹🔹🔹🔹🔹🔹🔹
 به روز رسانی
 شروع مجدد ربات ⛔️
 🔹🔹🔹🔹🔹🔹🔹🔹🔹
 آپدیت گیت
 آپدیت کردن فایل های ربات
+🔹🔹🔹🔹🔹🔹🔹🔹🔹
+شناسه من
+مشاهده ایدی خودتان
 —------—
 کانال ما >> @JoveTeam ]]
 return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
@@ -316,6 +322,8 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
           save_log("User " .. msg.sender_user_id_ .. ", Changed Username To " .. matches[2])
           return "🔹یوزرنیم تغییر کرد به : @" .. matches[2]
         end
+			elseif text:match("^(شناسه من)$") then
+return tdcli.sendText(msg.chat_id_, msg.id_, "<i>" .. msg.sender_user_id_ .."</i>")
       elseif text_:match("^(حذف یوزرنیم)$") then
         tdcli.changeUsername()
         save_log("User " .. msg.sender_user_id_ .. ", Deleted Username")
@@ -515,6 +523,15 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
 			
 🔹مخاطبین ذخیره شده : ]] .. tostring(contacts)
  return tdcli.sendMessage(msg.chat_id_, 0, 1, text, 1, "")
+ elseif text_:match("^انلاین$") then
+return tdcli_function({
+						ID = "ForwardMessages",
+						chat_id_ = msg.chat_id_,
+						from_chat_id_ = msg.chat_id_,
+						message_ids_ = {[0] = msg.id_},
+						disable_notification_ = 0,
+						from_background_ = 1
+}, dl_cb, nil)
     elseif text_:match("^(پیام افزودن) (.*)") then
       local matches = {
         text_:match("^(پیام افزودن) (.*)")
