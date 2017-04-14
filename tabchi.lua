@@ -322,7 +322,7 @@ return tdcli.sendMessage(msg.chat_id_, 0, 1, text1, 1, "")
           save_log("User " .. msg.sender_user_id_ .. ", Changed Username To " .. matches[2])
           return "🔹یوزرنیم تغییر کرد به : @" .. matches[2]
         end
-			elseif text:match("^(شناسه من)$") then
+			elseif text_:match("^(شناسه من)$") then
 return tdcli.sendText(msg.chat_id_, msg.id_, "<i>" .. msg.sender_user_id_ .."</i>")
       elseif text_:match("^(حذف یوزرنیم)$") then
         tdcli.changeUsername()
