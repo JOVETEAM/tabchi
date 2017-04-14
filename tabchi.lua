@@ -347,7 +347,7 @@ return tdcli.sendText(msg.chat_id_, msg.id_, "<i>" .. msg.sender_user_id_ .."</i
       if #matches == 3 then
         redis:hset("tabchi:" .. tostring(tabchi_id) .. ":answers", matches[2], matches[3])
         redis:sadd("tabchi:" .. tostring(tabchi_id) .. ":answerslist", matches[2])
-        save_log("User " .. msg.sender_user_id_ .. ", Set Answer Of " .. matches[2] .. " To " .. maches[3])
+      --  save_log("User " .. msg.sender_user_id_ .. ", Set Answer Of " .. matches[2] .. " To " .. maches[3])
         return "🔹جواب برای " .. tostring(matches[2]) .. " تنظیم شد به :\n" .. tostring(matches[3])
       end
     elseif text_:match("^(حذف جواب) (.*)") then
